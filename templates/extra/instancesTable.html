@@ -1,0 +1,122 @@
+<p>Main Database Server</p>
+
+<table class="table">
+    <tr>
+    <th scope="col">Instance Name</th>
+    <th scope="col">Instance ID</th>
+    <th scope="col">Instance state</th>
+    <th scope="col">Volume used</th>
+    <th scope="col">Action</th>
+    </tr>
+    {% for i in instance_list%}
+    <tr>
+        <form action="{{ url_for('home') }}" method="post">
+        <td >{{ i['Instance_name']}}</td>
+        <td ><input class="test" type="text" name="Instance_ID" value="{{i['Instance_ID']}}" id="Instance_ID" readonly></td>
+
+            {% if i['Instance_state'] == "stopped"  %}
+                <td > 
+                    <span class="logged-out">●</span> 
+                    <input class="test" type="text" name="Instance_state" value="{{i['Instance_state']}}" id="Instance_state" readonly>
+                </td>
+
+                <td>
+                </td>
+
+                <td>
+                    <input type="submit" value="Turn on">
+                </td>
+            {% endif %}
+
+            {% if i['Instance_state'] == "running"  %}
+                <td > 
+                    <span class="logged-in">●</span>
+                    <input class="test" type="text" name="Instance_state" value="{{i['Instance_state']}}" id="Instance_state" readonly>
+                </td>
+                <td>
+                    <input class="test" type="text" name="Used_volume" value="{{i['usedVolume']}} / 8 GB" id="Used_volume" readonly>
+                </td>
+                <td>
+                        <input type="submit" value="Turn off">
+                </td>
+            {% endif %}
+
+            {% if i['Instance_state'] == "stopping" or i['Instance_state'] == "pending"  %}
+                <td > 
+                    <span class="in-out">●</span> 
+                    <input class="test" type="text" name="Instance_state" value="{{i['Instance_state']}}" id="Instance_state" readonly>
+                </td>
+
+                <td>
+
+                </td>
+
+                <td>
+                </td>
+            {% endif %}
+
+        </form>
+    </tr>
+    {% endfor %}
+</table>
+
+<p>Backup Database Server</p>
+
+<table class="table">
+    <tr>
+    <th scope="col">Instance Name</th>
+    <th scope="col">Instance ID</th>
+    <th scope="col">Instance state</th>
+    <th scope="col">Volume used</th>
+    <th scope="col">Action</th>
+    </tr>
+    {% for i in backup_instance_list%}
+    <tr>
+        <form action="{{ url_for('home') }}" method="post">
+        <td >{{ i['Instance_name']}}</td>
+        <td ><input class="test" type="text" name="Instance_ID" value="{{i['Instance_ID']}}" id="Instance_ID" readonly></td>
+
+            {% if i['Instance_state'] == "stopped"  %}
+                <td > 
+                    <span class="logged-out">●</span> 
+                    <input class="test" type="text" name="Instance_state" value="{{i['Instance_state']}}" id="Instance_state" readonly>
+                </td>
+
+                <td>
+                </td>
+
+                <td>
+                    <input type="submit" value="Turn on">
+                </td>
+            {% endif %}
+
+            {% if i['Instance_state'] == "running"  %}
+                <td > 
+                    <span class="logged-in">●</span>
+                    <input class="test" type="text" name="Instance_state" value="{{i['Instance_state']}}" id="Instance_state" readonly>
+                </td>
+                <td>
+                    <input class="test" type="text" name="Used_volume" value="{{i['usedVolume']}} / 8 GB" id="Used_volume" readonly>
+                </td>
+                <td>
+                        <input type="submit" value="Turn off">
+                </td>
+            {% endif %}
+
+            {% if i['Instance_state'] == "stopping" or i['Instance_state'] == "pending"  %}
+                <td > 
+                    <span class="in-out">●</span> 
+                    <input class="test" type="text" name="Instance_state" value="{{i['Instance_state']}}" id="Instance_state" readonly>
+                </td>
+
+                <td>
+                </td>
+
+                <td>
+                </td>
+            {% endif %}
+
+        </form>
+    </tr>
+    {% endfor %}
+</table>

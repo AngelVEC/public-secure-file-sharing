@@ -1,0 +1,441 @@
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <link rel="apple-touch-icon" sizes="76x76" href="../static/assets/img/kalamari.png">
+    <link rel="icon" type="image/png" href="../static/assets/img/kalamari.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>FileInfo</title>
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+    <!-- MDB -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.0.1/mdb.min.css" rel="stylesheet" />
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.0.1/mdb.min.js"></script>
+
+    <!-- Jquery  -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/static/assets/css/new.css">
+
+    <!-- pls add this for toggle in fileinfo -->
+    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
+
+
+    <style>
+        body {
+            height: 100%;
+            margin: 0;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
+
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg bg-info navbar-dark">
+        <!-- Container wrapper -->
+        <div class="container-fluid">
+            <!-- Navbar brand -->
+            <a class="navbar-brand" href="{{ url_for('index') }}"><img src="../static/assets/img/kalamari.png">&nbsp
+                Cloud Storage Solutions</a>
+
+            <!-- Icons -->
+            <ul class="navbar-nav d-flex flex-row me-1">
+                <li class="nav-item me-3 me-lg-0">
+                    <a class="nav-link text-white" href="{{ url_for('home') }}"><i class="fas fa-user"></i>
+                        Dashboard</a>
+                </li>
+                <li class="nav-item me-3 me-lg-0">
+                    <a class="nav-link text-white" href="{{ url_for('logout') }}"><i class="fas fa-lock"></i> Log
+                        Out</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- End of Navbar -->
+
+
+    <div class="bg">
+        <div class="container bodycenter bodyProfileFileInfo">
+
+            <fieldset class="border p-5">
+                <legend class="float-none w-auto p-2 legendBody">
+                    <h1>File Information</h1>
+                </legend>
+
+                {% include 'flashmsg.html'%}
+
+                <!-- Begin Of File Description -->
+                <h2 id="titleTwo"> File Description </h2>
+                <br>
+
+                <div class="row">
+                    <div class="col-sm-4">
+                        <h6 class="mb-0" id="fontChanger">File Name</h6>
+                    </div>
+                    <div class="col text-secondary" id="fontChanger">
+                        <form action="{{url_for('editFileName')}}" method="post" style="display: inline-block;">
+                            <label class="fileInfo fontChanger fileNameWidth show"
+                                id="labelName">{{result['fileName']}}</label>
+                            <input class="fileInfo hide" type="text" name="fileName" id="fileName"
+                                style="min-width: 300px;" value="{{result['fileName']}}">
+
+                            <input class="fileID" type="text" name="fileID" value="{{result['id']}}" hidden>
+                            {% if theRecepient != True %}
+
+                            <button type="button" class="show" id="editNameButton" title="Edit File Name"><i
+                                    class="fa fa-edit fa-2xs"></i></button>
+                            <button type="submit" class="hide" id="postIt" name="action" value="change Name"><i
+                                    class="fa fa-check fa-2xs"></i></button>
+                            <button type="button" class="hide" id="cancelEditName"><i
+                                    class="fa fa-close fa-2xs"></i></button>
+
+                            {% endif %}
+                        </form>
+
+                    </div>
+                </div>
+                <hr class="bottomMargin">
+
+                <div class="row">
+                    <div class="col-sm-4">
+                        <h6 class="mb-0" id="fontChanger">File Size</h6>
+                    </div>
+                    <div class="col-sm-4 text-secondary" id="fontChanger">
+                        {{result['fileSize'] }}
+                    </div>
+                </div>
+                <hr class="bottomMargin">
+
+                <div class="row">
+                    <div class="col-sm-4">
+                        <h6 class="mb-0" id="fontChanger">Uploaded at</h6>
+                    </div>
+                    <div class="col text-secondary" id="fontChanger">
+                        {{dateUpload}}
+                    </div>
+                </div>
+
+                <hr class="bottomMargin">
+                <br class="bottomMargin">
+
+                <!-- End Of File Description -->
+
+
+                <!-- Start of File Security -->
+                {% if theRecepient != True %}
+
+                <h2 id="titleTwo"> File Security </h2>
+                <br class="bottomMargin">
+
+                <div class="col-md-12">
+                    <div class="col-md-8">
+                    </div>
+                    {% if result['havePassword'] == True %}
+                    <div class="col-md-4">
+                        <div>
+                            <label for="toggle-one"><i class="fa fa-lock"></i></label>
+                            <input type="checkbox" data-toggle="toggle" data-size="lg" id="toggle-one" checked> </input>
+                        </div>
+                    </div>
+                    {% elif result['havePassword'] == False %}
+                    <div class="col-md-4">
+                        <div>
+                            <label for="toggle-one"><i class="fa fa-lock" style="font-size:26px"></i></label>
+                            <input type="checkbox" data-toggle="toggle" data-size="lg" id="toggle-one">
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endif %}
+
+                <br>
+
+                {% if result['havePassword'] == False %}
+                <div class="col-md-3" id="filePassword" style="display : none;">
+                    <form action="{{url_for('editFilePassword')}}" method="post">
+                        <label for="pass">Password :</label>
+                        <br>
+                        <input type="password" id="pass" name="password" required>
+                        <br class="bottomMargin">
+                        <label for="passRepeat">Password Repeat :</label>
+                        <br>
+
+                        <input type="password" id="passRepeat" name="passwordRepeat" required>
+                        <br>
+                        <input class="fileID" type="text" name="fileID" value="{{result['id']}}" hidden>
+                        <input class="test" type="text" name="originalName" value="{{result['fileName']}}"
+                            id="originalName" hidden>
+                        <p id="checkerPassword"></p>
+                        <button class="btn btn-primary" type="submit" id="changePassword" name="action"
+                            value="change Password">Encrypt File</button>
+                    </form>
+                </div>
+                {% elif result['havePassword'] == True %}
+                <div class="col-md-3" id="filePassword" style="display : none;">
+                    <form action="{{url_for('editFilePassword')}}" method="post">
+                        <label for="pass">Password :</label>
+                        <input type="password" id="pass" name="password" required>
+                        <input class="fileID" type="text" name="fileID" value="{{result['id']}}" hidden>
+                        <input class="test" type="text" name="originalName" value="{{result['fileName']}}"
+                            id="originalName" hidden>
+                        <button class="btn btn-primary" type="submit" id="removePassword" name="action"
+                            value="remove Password">Remove Encryption</button>
+                    </form>
+                </div>
+                {% endif %}
+
+                <br class="bottomMargin">
+
+                <!-- End of File Security -->
+
+
+                <!-- Start Of File Sharing -->
+
+                <h2 id="titleTwo"> File Sharing </h2>
+
+                <form action="{{url_for('fileInfo')}}" class="fileInfo" method="post">
+
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <h6 class="mb-0" id="fontChanger">File Status</h6>
+                        </div>
+
+                        {% if result['shared'] == False and theRecepient != True %}
+                        <div class="col">
+
+                            <div class="col-sm-4 text-secondary" id="fontChanger">
+                                Private
+                            </div>
+
+                            <input class="fileID" type="text" name="fileID" value="{{result['id']}}" hidden>
+
+                        </div>
+
+                        {% elif result['shared'] == True and theRecepient != True %}
+                        <div class="col">
+                            <div class="col-sm-4 text-secondary" id="fontChanger">
+                                Sharing
+                            </div>
+
+                            <input class="fileID" type="text" name="fileID" value="{{result['id']}}" hidden>
+                            <input type="text" name="code" value="{{result['shareCode']}}" id="code" hidden>
+                        </div>
+
+                        {% elif result['shared'] == True and theRecepient != False %}
+                        <div class="col">
+                            <div class="col-sm-4 text-secondary" id="fontChanger">
+                                Shared
+                            </div>
+
+                            <input class="fileID" type="text" name="fileID" value="{{result['id']}}" hidden>
+                            <input type="text" name="code" value="{{result['shareCode']}}" id="code" hidden>
+                        </div>
+
+                        {% endif %}
+                    </div>
+
+
+                    {% if result['shared'] == False and theRecepient != True %}
+
+                    <button class="btn btn-primary" type="submit" name="action" value="share code">
+                        Share File
+                    </button>
+                    {% elif result['shared'] == True and theRecepient != True %}
+                    <button class="btn btn-primary" type="submit" name="action" value="revoke Sharing">
+                        Revoke Sharing
+
+                    </button>
+                    {% endif %}
+
+                </form>
+
+
+                <!-- End of File Sharing -->
+
+            </fieldset>
+
+
+            {% if result['shared'] == True and theRecepient != True %}
+            <fieldset class="border p-5">
+                <legend class="float-none w-auto p-2 legendBody">
+                    <h1>File Sharing Information</h1>
+                </legend>
+                <!-- Start of File Sharing Information -->
+
+                <div class="row" >
+                    <div class="col-sm-3">
+                        <h2 class="mb-0 titleTwo">File Code</h2>
+                    </div>
+                    <div class="col-sm-9">
+                        <h2 class="titleTwo">Share by Email</h2>
+                    </div>
+                </div>
+                <!-- Add Recipient -->
+
+                <div class="row">
+                    <div class="col-md-3">
+                        <h3 class="mb-0 ">{{result['shareCode']}}</h3>
+                    </div>
+                    <!-- Here================================================================================================================================= -->
+                    <div class="col-md-9">
+                        <div class="form-group">
+                            <form action="{{ url_for('addShare')}}" method="post">
+                                <div class="row">
+
+                                    <div class="col-md-5">
+                                        <input type="text" class="form-control " name="email" placeholder="Input User Email"
+                                        id="email">
+                                    </div>
+                                    <div class="col-md-3">
+                                        
+                                        <input class="btn btn-primary" type="submit" name="action" value="Add Recipient">
+                                        <input type="text" name="code" value="{{result['shareCode']}}" id="code" hidden>
+                                        <input class="fileID" type="text" name="fileID" value="{{result['id']}}" hidden>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <br class="bottomMargin">
+
+                <div class="fontChanger" style="border-bottom: solid 3px black;">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h2> Shared Recipient </h2>
+                        </div>
+                        <div class="col-md-6">
+                            <h2> Remove </h2>
+
+                        </div>
+                    </div>
+                </div>
+
+
+                {% for i in sharePeople %}
+                <div class="row">
+                    <div class="col-md-1" style="width: 53%;">
+                        <h6 class="mb-0 fontChanger">{{i}}</h6>
+                    </div>
+                    <div class="col-md-1">
+                        <form action="{{ url_for('removeShared') }}" method="post" style="display:inline-block;">
+                            <input class="test" type="text" name="recipientEmail" value="{{i}}" id="recipientEmail"
+                                style="width:100%" hidden />
+                            <input type="text" name="code" value="{{result['shareCode']}}" id="code" hidden>
+                            <input class="fileID" type="text" name="fileID" value="{{result['id']}}" hidden>
+
+                            <button class="buttonImage" type="submit" name="action" value="Remove"> <img
+                                    src="../static/assets/img/icon/Close.png" height="25" /> </button>
+
+                        </form>
+
+                    </div>
+                </div>
+
+                {% endfor %}
+
+
+            </fieldset>
+
+            {% endif %}
+
+            <br class="bottomMargin" >
+            <br class="bottomMargin" >
+
+            <script>
+                var toggleValue = $('#toggle-one').prop('checked')
+
+                function hideFlaskMessage(){
+                    $("#messageFlask").hide();
+                }
+
+
+                jQuery(document).ready(function () {
+                    jQuery('#editNameButton').on('click', function (event) {
+                        jQuery('#fileName').slideToggle();
+                        jQuery('#labelName').hide();
+                        jQuery("#editNameButton").hide();
+                        jQuery("#cancelEditName").show();
+                        jQuery("#postIt").show();
+
+                    });
+                });
+
+                jQuery(document).ready(function () {
+                    jQuery('#cancelEditName').on('click', function (event) {
+                        jQuery('#fileName').hide();
+                        jQuery('#labelName').fadeIn();
+                        jQuery("#editNameButton").show();
+                        jQuery("#cancelEditName").hide();
+                        jQuery("#postIt").hide();
+                    });
+                });
+
+
+                $('#toggle-one').bootstrapToggle({
+                    on: 'Enabled',
+                    off: 'Disabled'
+                });
+
+                $('#toggle-one').change(function () {
+                    var test = $(this).prop('checked');
+                    if (toggleValue != test) {
+                        $('#filePassword').show();
+                    }
+                    else {
+                        $('#filePassword').hide();
+                    }
+                });
+
+                $('#pass').on('keyup', function () {
+                    var confirmPassword = $('#passRepeat').val();
+
+                    if (confirmPassword != null) {
+                        var password = $('#pass').val();
+                        if (!confirmPassword) {
+                            $('#checkerPassword').html("");
+                        }
+                        else if (password != confirmPassword) {
+                            $('#checkerPassword').html("Password does not Match !").css('color', 'red');
+                        }
+                        else {
+                            $('#checkerPassword').html("");
+                        }
+                    }
+                });
+
+                $('#passRepeat').on('keyup', function () {
+                    var password = $('#pass').val();
+                    var confirmPassword = $('#passRepeat').val();
+                    if (password != confirmPassword) {
+                        $('#checkerPassword').html("Password does not Match !").css('color', 'red');
+                    }
+                    else {
+                        $('#checkerPassword').html("");
+                    }
+
+                });
+                
+                </script>
+        </div>
+
+
+    </div>
+</body>
+{% endblock %}
+
+</html>

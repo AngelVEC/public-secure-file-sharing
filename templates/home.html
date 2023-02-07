@@ -1,0 +1,434 @@
+{% block content %}
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <link rel="apple-touch-icon" sizes="76x76" href="../static/assets/img/kalamari.png">
+    <link rel="icon" type="image/png" href="../static/assets/img/kalamari.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>User Dashboard</title>
+
+    <!-- Bootstrap CSS + JavaScript -->
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="../static/assets/css/new.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+    <!-- MDB -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.0.1/mdb.min.css" rel="stylesheet" />
+    <!-- MDB -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.0.1/mdb.min.js"></script>
+
+
+
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg bg-info navbar-dark">
+        <!-- Container wrapper -->
+        <div class="container-fluid">
+            <!-- Navbar brand -->
+            <a class="navbar-brand" href="{{ url_for('index') }}"><img src="../static/assets/img/kalamari.png">&nbsp
+                Cloud Storage Solutions</a>
+
+            <!-- Icons -->
+            <ul class="navbar-nav d-flex flex-row me-1">
+                <li class="nav-item me-3 me-lg-0">
+                    <a class="nav-link text-white" href="{{ url_for('profile') }}"><i class="fas fa-user"></i>
+                        Profile</a>
+                </li>
+                <li class="nav-item me-3 me-lg-0">
+                    <a class="nav-link text-white" href="{{ url_for('logout') }}"><i class="fas fa-lock"></i> Log
+                        Out</a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Container wrapper -->
+    </nav>
+    <div class="container-fluid bg">
+        <!-- Content here -->
+
+        <div class="row justify-content-end">
+            <div class="col-3">
+                <!-- Button trigger modal -->
+                <br>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#uploadModal">
+                    Upload Here
+                </button>
+
+            </div>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="uploadModalLabel">Upload Files</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        {{ dropzone.load_css() }}
+                        {{ dropzone.style('border: 2px dashed #000000; min-height: 500px; height:100%; width:100%;
+                        background-color:transparent !important; color:black;') }}
+                        {{ dropzone.create(action='upload',id = "my-dropzone", class="dropzone") }}
+                        {{ dropzone.load_js() }}
+                        {{ dropzone.config() }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="container bg-row">
+            <p>Welcome back, {{ username }}!</p>
+            {% include 'flashmsg.html' %}
+
+
+            <p>Uploaded File</p>
+            <div class="row input-group rounded">
+                <div id="col-12">
+                    <input id="myInput" type="search" placeholder=" Search Uploaded Files">
+                </div>
+            </div>
+            <div class="row" id="myTableHeader">
+                <div class="col-8 border">File Name</div>
+                <div class="col-4 border">File Description</div>
+            </div>
+
+            {% for i in result %}
+            {% if i['havePassword'] == False %}
+            <form action="{{ url_for('home') }}" method="post">
+                <div class="row" id="myTable">
+                    <div class="col-8 border" data-value="{{i['fileName']}}">
+                        <input class="filename" type="text" name="originalName" value="{{i['fileName']}}"
+                            id="originalName">
+                    </div>
+
+                    <div class="col-4 border" data-value="{{i['fileName']}}">
+                        <input type="text" name="file_id" value="{{i['id']}}" id="file_id" hidden>
+                        <button type="submit" name="action" class="btn btn-primary btn-sm"
+                            value="Download">Download</button>
+                        <button type="submit" name="action" class="btn btn-info btn-sm" value="File description">File
+                            Description</button>
+
+                        <!--Delete File-->
+                        <button type="button" class="deletemodalx btn btn-danger btn-sm" data-toggle="modal"
+                            data-target="#deleteModal" data-id="{{i['id']}}">
+                            Delete File
+                        </button>
+                        <!--DELETE FILE-->
+                        <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog"
+                            aria-labelledby="deleteModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="deleteModalLabel">Delete File?</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="container">
+                                            <!--YES BUTTON-->
+                                            <input type="text" name="file_deleteModalid" id="file_deleteModalid" hidden>
+                                            <button type="submit" name="action" class="btn btn-info btn-sm"
+                                                value="DeleteFile">Yes, Delete File</button>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </form>
+            {% else %}
+            <form action="{{ url_for('home') }}" method="post">
+                <div class="row" id="myTable" style="margin-left:10px; margin-right:10px;">
+                    <div class="col-8 border" data-value="{{i['fileName']}}">
+                        <sup><i class="fa fa-lock"></i> </sup>
+                        <input class="filename" type="text" name="originalName" value="{{i['fileName']}}"
+                            id="originalName">
+                    </div>
+
+                    <div class="col-4 border" data-value="{{i['fileName']}}">
+                        <input type="text" name="file_id" value="{{i['id']}}" id="file_id" hidden>
+                        <button type="button" class="downloadmodalx btn btn-primary btn-sm" data-toggle="modal"
+                            data-target="#downloadModal1" data-id="{{i['id']}}" data-fileName="{{i['fileName']}}">
+                            Download
+                        </button>
+                        <button type="submit" name="action" class="btn btn-info btn-sm" value="File description">File
+                            Description</button>
+
+                        <!--Delete File-->
+                        <button type="button" class="deletemodalx btn btn-danger btn-sm" data-toggle="modal"
+                            data-target="#deleteModal" data-id="{{i['id']}}">
+                            Delete File
+                        </button>
+                        <!--DELETE FILE-->
+                        <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog"
+                            aria-labelledby="deleteModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="deleteModalLabel">Delete File?</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="container">
+                                            <!--YES BUTTON-->
+                                            <input type="text" name="file_deleteModalid" id="file_deleteModalid" hidden>
+                                            <button type="submit" name="action" class="btn btn-info btn-sm"
+                                                value="DeleteFile">Yes, Delete File</button>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- MODAL FOR DOWNLOAD / PASSWORD-->
+                        <div class="modal fade" id="downloadModal1" tabindex="-1" role="dialog"
+                            aria-labelledby="downloadModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="downloadModalLabel">File is Password Protected</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="container">
+                                            <input type="text" name="file_modalID" id="file_modalID" hidden>
+                                            <input type="text" name="file_modalFileName" id="file_modalFileName" hidden>
+                                            <label class="col-md-12">Enter Password:</label>
+                                            <div class="col-md-12">
+                                                <input id="passwordInput" name="passwordInput" type="password"
+                                                    placeholder="" class="form-control input-md">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" name="action" class="btn btn-secondary"
+                                            value="downloadPass">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- MODAL FOR DOWNLOAD / PASSWORD-->
+                    </div>
+                </div>
+            </form>
+            {% endif%}
+            {% endfor %}
+            <br>
+        </div>
+
+
+
+        <div class="container bg-row">
+
+            <!-- Add File Shared Code -->
+            <p>Shared File</p>
+
+            <div class="giveboxCode">
+                <form action="{{ url_for('code')}}" method="post">
+                    <div class="row form-group" id="myTable">
+
+                        <div class="col-md-8 ">
+                            <input class="code" type="text" name="code" value=""
+                                id="code" placeholder="File Shared code">
+                        </div>
+                        <div class="col-md-4">
+                            <input class="btn btn-primary " type="submit" name="action" value="get file">
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="row" id="myTable">
+                <div class="col-4 border">File Name</div>
+                <div class="col-4 border">File Owner</div>
+                <div class="col-4 border">Download / Description</div>
+            </div>
+
+            {% for i,k,l in sharedFile|zip(fileName, passwordProtected)%}
+            {% if l == False %}
+            <form action="{{ url_for('home') }}" method="post">
+                <div class="row" id="myTable">
+                    <div class="col-4 border">
+                        <input style="color: black;" class="filename" type="text" name="fileName" value="{{k}}"
+                            id="fileName">
+                    </div>
+                    <div class="col-4 border">
+                        <input style="color: black;" class="filename" type="text" name="owner" value="{{i['owner']}}"
+                            id="owner" readonly>
+                    </div>
+                    <div class="col-4 border">
+                        <input type="text" name="file_id" value="{{i['fileID']}}" id="file_id" hidden>
+                        <button type="submit" name="action" class="btn btn-primary btn-sm"
+                            value="Download Shared File">Download</button>
+                        <button type="submit" name="action" class="btn btn-info btn-sm" value="Shared File Desc">File
+                            Description</button>
+                    </div>
+                </div>
+            </form>
+            {% else %}
+            <form action="{{ url_for('home') }}" method="post">
+                <div class="row" id="myTable">
+                    <div class="col-4 border">
+                        <sup><i class="fa fa-lock"></i> </sup>
+                        <input style="color: black;" class="filename" type="text" name="fileName" value="{{k}}"
+                            id="fileName"></input>
+                    </div>
+                    <div class="col-4 border">
+                        <input style="color: black;" class="filename" type="text" name="owner" value="{{i['owner']}}"
+                            id="owner" readonly>
+                    </div>
+                    <div class="col-4 border">
+                        <input type="text" name="file_id" value="{{i['fileID']}}" id="file_id" hidden>
+                        <button type="button" class="downloadmodal2x btn btn-primary btn-sm" data-toggle="modal"
+                            data-target="#downloadModal2" data-id="{{i['fileID']}}" data-fileName="{{k}}"
+                            data-owner="{{i['owner']}}">
+                            Download
+                        </button>
+                        <button type="submit" name="action" class="btn btn-info btn-sm" value="Shared File Desc">File
+                            Description</button>
+
+                        <!-- MODAL FOR DOWNLOAD / PASSWORD-->
+                        <div class="modal fade" id="downloadModal2" tabindex="-1" role="dialog"
+                            aria-labelledby="downloadModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="downloadModalLabel">File is Password Protected</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="container">
+                                            <input type="text" name="file_modalID2" id="file_modalID2" hidden>
+                                            <input type="text" name="file_modalFileName2" id="file_modalFileName2"
+                                                hidden>
+                                            <input type="text" name="file_modalOwner2" id="file_modalOwner2" hidden>
+                                            <label class="col-md-12">Enter Password:</label>
+                                            <div class="col-md-12">
+                                                <input id="passwordInput" name="passwordInput" type="password"
+                                                    placeholder="" class="form-control input-md">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" name="action" class="btn btn-secondary"
+                                            value="Shared downloadPass">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- MODAL FOR DOWNLOAD / PASSWORD-->
+                    </div>
+                </div>
+            </form>
+            {%endif%}
+            {% endfor %}
+            <br>
+        </div>
+
+    </div>
+
+    <!-- The loading Modal -->
+    <div id="myModal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-contentmod">
+            <iframe class="iframeUploadLoading" src="{{url_for('loading')}}"></iframe>
+        </div>
+
+    </div>
+</body>
+
+
+{% endblock %}
+<script>
+    var modal = document.getElementById("myModal");
+    // Refreshes the page upon modal closing
+    $('#uploadModal').on('hidden.bs.modal', function () {
+        modal.style.display = "block";
+        location.reload();
+    });
+
+    var deleteModal = document.getElementById("deleteModal");
+    // Refreshes the page upon modal closing
+    $('#uploadModal').on('hidden.bs.modal', function () {
+        deleteModal.style.display = "block";
+    });
+
+    $(document).on("click", ".downloadmodalx", function () {
+        var eventId = $(this).data('id');
+        var name = $(this).attr('data-fileName');
+        $('#file_modalID').val(eventId);
+        $('#file_modalFileName').val(name);
+    });
+
+    $(document).on("click", ".downloadmodal2x", function () {
+        var eventId = $(this).data('id');
+        var name = $(this).attr('data-fileName');
+        var owner = $(this).attr('data-owner');
+
+        $('#file_modalID2').val(eventId);
+        $('#file_modalFileName2').val(name);
+        $('#file_modalOwner2').val(owner);
+    });
+
+    $(document).on("click", ".deletemodalx", function () {
+        var eventId = $(this).data('id');
+        $('#file_deleteModalid').val(eventId);
+    });
+
+    // Search Function
+    $(document).ready(function () {
+        $("#myInput").on("keyup", function searchFile() {
+            var value = $(this).val().toLowerCase();
+            $("#myTable > div").filter(function () {
+                $(this).toggle($(this).data('value').toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+
+</script>
+
+</html>

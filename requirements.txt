@@ -1,0 +1,13 @@
+boto3
+firebase_admin
+Flask
+Flask_Dropzone
+google_api_python_client
+google_auth_oauthlib
+humanize
+paramiko
+protobuf
+pycryptodome
+pyminizip
+pyrebase
+Pyrebase4

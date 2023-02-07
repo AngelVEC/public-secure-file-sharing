@@ -1,0 +1,41 @@
+{% extends 'layout.html' %}
+
+{% block title %}upload{% endblock %}
+
+{% block content %}
+    
+  {% include 'flashmsg.html'%}
+  <h2>Upload Page</h2>
+
+  {{ dropzone.create(action='upload',id = "my-dropzone", class="dropzone") }}
+  {{ dropzone.load_js() }}
+  {{ dropzone.config() }}
+
+  <!-- The Modal -->
+  <div id="myModal" class="modal">
+
+    <!-- Modal content -->
+    <div class="modal-contentmod">
+      <iframe class="iframeUploadLoading" src="{{url_for('loading')}}"></iframe>
+    </div>
+
+  </div>
+  <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+  <script>
+      Dropzone.autoDiscover = false;
+      
+      $(function() {
+        var myDropzone = new Dropzone("#my-dropzone");
+        var modal = document.getElementById("myModal");
+
+        myDropzone.on("addedfile", file => {
+          modal.style.display = "block";
+        });
+
+        myDropzone.on("queuecomplete", function(file) {
+          // Called when all files in the queue finish uploading.
+          window.location = "{{ url_for('upload') }}";
+        });
+      })
+  </script>
+{% endblock %}

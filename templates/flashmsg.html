@@ -1,0 +1,96 @@
+{% with errors = get_flashed_messages(category_filter = ["databaseError"]) %}
+{% if errors %}
+
+<ul class=flashes>
+    {% for message in errors %}
+    <div class="col alert alert-danger alert-dismissible fade show">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        {{ message }}
+    </div>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+
+{% with success = get_flashed_messages(category_filter = ["successUpload"]) %}
+{% if success %}
+
+<ul class=flashes>
+    {% for message in success %}
+    <div class="col alert alert-success alert-dismissible fade show">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        {{ message }}
+    </div>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+
+{% with success = get_flashed_messages(category_filter = ["success"]) %}
+{% if success %}
+<ul class=flashes>
+    {% for message in success %}
+    <div class="alert alert-success alert-dismissible fade show" style="width: 90%;" id="messageFlask">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close" onclick="hideFlaskMessage()" >&times;</a>
+        {{ message }}
+    </div>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+
+{% with msg = get_flashed_messages(category_filter = ["failed"]) %}
+{% if msg %}
+
+<ul class=flashes>
+    {% for message in msg %}
+    <div class="col alert alert-danger alert-dismissible fade show" role="alert" style="width: 90%;" id="messageFlask">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close" onclick="hideFlaskMessage()">&times;</a>
+        {{ message }}
+    </div>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+
+{% with msg = get_flashed_messages(category_filter = ["failed2"]) %}
+{% if msg %}
+
+<ul class=flashes id="login">
+    {% for message in msg %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close" >&times;</a>
+        <strong>{{ message }} </strong>
+    </div>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+
+{% with msg = get_flashed_messages(category_filter = ["failedCode"]) %}
+{% if msg %}
+
+<ul class=flashes id="login">
+    {% for message in msg %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>{{ message }} </strong>
+    </div>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+
+{% with msg = get_flashed_messages(category_filter = ["failedCode2"]) %}
+{% if msg %}
+
+<ul class=flashes id="login">
+    {% for message in msg %}
+    <div class="alert alert-danger alert-dismissible" role="alert" style="width: 90%;" id="messageFlask">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close" onclick="hideFlaskMessage()">&times;</a>
+        <strong>{{ message }} </strong>
+    </div>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}

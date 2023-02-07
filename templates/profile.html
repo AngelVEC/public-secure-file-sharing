@@ -1,0 +1,180 @@
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <link rel="apple-touch-icon" sizes="76x76" href="../static/assets/img/kalamari.png">
+    <link rel="icon" type="image/png" href="../static/assets/img/kalamari.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Profile</title>
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+    <!-- MDB -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.0.1/mdb.min.css" rel="stylesheet" />
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.0.1/mdb.min.js"></script>
+
+    <!-- Jquery  -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/static/assets/css/new.css">
+
+    <style>
+        body {
+            height: 100%;
+            margin: 0;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
+    </style>
+
+
+
+
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg bg-info navbar-dark">
+        <!-- Container wrapper -->
+        <div class="container-fluid">
+            <!-- Navbar brand -->
+            <a class="navbar-brand" href="{{ url_for('index') }}"><img src="../static/assets/img/kalamari.png">&nbsp
+                Cloud Storage Solutions</a>
+
+            <!-- Icons -->
+            <ul class="navbar-nav d-flex flex-row me-1">
+                <li class="nav-item me-3 me-lg-0">
+                    <a class="nav-link text-white" href="{{ url_for('home') }}"><i class="fas fa-user"></i>
+                        Dashboard</a>
+                </li>
+                <li class="nav-item me-3 me-lg-0">
+                    <a class="nav-link text-white" href="{{ url_for('logout') }}"><i class="fas fa-lock"></i> Log
+                        Out</a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Container wrapper -->
+    </nav>
+
+    <script>
+        jQuery(document).ready(function () {
+            jQuery('#showEmailForm').on('click', function (event) {
+                jQuery('#emailForm').slideToggle();
+            });
+        });
+
+        function hideFlaskMessage() {
+            $("#messageFlask").hide();
+        }
+    </script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script>
+        function delete_flash(flash) {
+            $(flash).parent().remove()
+        }
+    </script>
+
+    <div class="bg">
+        <div class="container bodycenter bodyProfileFileInfo">
+
+            <fieldset class="border p-5">
+                <legend class="float-none w-auto p-2 legendBody" style="color: blue;">
+                    <h1> Profile Information </h1>
+                </legend>
+
+                {% include 'flashmsg.html' %}
+
+                <div class="profileBody bodycenter">
+                    <h2 id="titleTwo"> My Profile Detail </h2>
+                    <br>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <h6 class="mb-0" id="fontChanger">Username</h6>
+                        </div>
+                        <div class="col-sm-4 text-secondary" id="fontChanger">
+                            {{userName}}
+                        </div>
+                        <form action="#" class="changeUsername" method="post">
+                            <div class="col-md-8 form-group">
+                                <!-- <label for="userName" class="profile"> Username -->
+                                </label>
+                                <input class="userName" type="text" name="userName" value="{{userName}}"
+                                    id="userName floatingInputGrid" hidden>
+
+                            </div>
+                        </form>
+                    </div>
+                    <hr class="bottomMargin">
+
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <h6 class="mb-0" id="fontChanger">Email</h6>
+                        </div>
+                        <div class="col-sm-4 text-secondary" id="fontChanger">
+                            {{e_mail}}
+                        </div>
+                    </div>
+                    <hr class="bottomMargin">
+                    <br class="bottomMargin">
+
+
+                    <h2 id="titleTwo"> Update Account </h2>
+                    <br>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <button class="buttonImage" id="showEmailForm" alt="changeEmail" title="Change Email"> <img
+                                    src="../static/assets/img//icon/changeEmail.png" height="35" /> Change my
+                                email</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <form action="{{ url_for('changePass') }}" class="changePass" method="post">
+                                <button class="buttonImage" value="Change Password" id="showEmailForm"
+                                    alt="resetPassword"> <img src="../static/assets/img/icon/ResetPassword.jpg"
+                                        height="35" /> Reset
+                                    password</button>
+                            </form>
+                        </div>
+                    </div>
+
+
+                    <div class="container" id="emailForm" style="float:left;">
+                        <br class="bottomMargin">
+                        <form action="{{ url_for('changeEmail') }}" class="changeEmail" method="post">
+                            <div class="col-md-8 form-floating">
+                                <input class="e_mail form-control" type="text" name="e_mail" value="{{e_mail}}"
+                                    id="e_mail floatingInputGrid">
+                                <label for="E-Mail floatingInputGrid" class="profile"> New Email</label>
+                            </div>
+                            <div class="col-md-4">
+                                <br style="margin-bottom: 5px;">
+                                <input type="submit" value="Change Email">
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+
+            </fieldset>
+
+            <footer></footer>
+        </div>
+
+
+    </div>
+
+
+</body>
+{% endblock %}
+
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>{% block title %}{% endblock %}</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+		<!--     Fonts and icons     -->
+		<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+		<!-- CSS Files -->
+		<link href="../static/assets/css/bootstrap.min.css" rel="stylesheet" />
+		{{ dropzone.load_css() }}
+		{{ dropzone.style('border: 2px dashed #0087F7; margin: 10%; min-height: 400px;') }}
+
+		<script src="../static/assets/js/core/jquery.min.js" type="text/javascript"></script>
+		<script src="../static/assets/js/core/popper.min.js" type="text/javascript"></script>
+		<script src="../static/assets/js/core/bootstrap.min.js" type="text/javascript"></script>
+
+		<!-- pls add this for toggle in fileinfo -->
+		<link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
+		<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
+	</head>
+
+	<body>
+		{% if (session['loggedin']) != True %}
+		<!--This is navbar for homepage (index.html) user not logged in-->
+			<nav class="navbar navbar-inverse">
+				<div class="container-fluid">
+					<div class="navbar-header">
+						<a class="navbar-brand" href="{{ url_for('index')}}">Kalamari</a>
+					</div>
+					<ul class="nav navbar-nav navbar-right">
+						<li><a href="{{ url_for('register') }}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+						<li><a href="{{ url_for('login') }}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+					</ul>
+				</div>
+			</nav>
+		{% else %}
+		<!--This is navbar if user logged in-->
+		<nav class="navbar navbar-inverse">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="{{ url_for('index')}}">Kalamari</a>
+				</div>
+				<ul class="nav navbar-right">
+					<li><a href="{{ url_for('home') }}"><i class="fas fa-home"></i> Dashboard</a></li>
+					<li><a href="{{ url_for('profile') }}"><i class="fas fa-user-circle"></i> Profile</a></li>
+					<li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+				</ul>
+			</div>
+		</nav>
+		{% endif %}
+
+		{% if request.path == "/" %}
+			<!--This is div for content on main page (under navbar)-->
+			<div>
+		{% endif %}
+
+		{% if request.path == "/profile" or request.path == "/home" or request.path == "/upload" or request.path == "/file" or request.path == "/fileInfo" %}
+			<!--This is div for content on user dashboard page (under navbar)-->
+			<div class="content">	
+		{% endif %}
+
+			{% block content %}{% endblock %}
+			</div>
+
+	</body>
+</html>

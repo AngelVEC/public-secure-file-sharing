@@ -1,0 +1,56 @@
+{% extends 'layout.html' %}
+
+{% block title %}File{% endblock %}
+
+{% block content %}
+    <h2>File List<h2>
+    <div class="container" style = "border : 1px solid;padding : 10px">
+        <p>Uploaded File</p>
+        <div class="col-md-12">
+            {% for i in result %}
+            <form action="{{ url_for('file') }}" method="post">
+                <div class="col-md-8 testingFile">
+                    <input class="test" type="text" name="originalName" value="{{i['fileName']}}" id="originalName" readonly>
+                </div>
+                <div class="col-md-4">
+                    <input type="text" name="file_id" value="{{i['id']}}" id="file_id" hidden>
+                    <input type="submit" name="action" value="Download">
+                    <input type="submit" name="action" value="File description">
+                </div>
+            </form>
+            {% endfor%}
+        </div>
+    </div>
+
+    {% if sharedFile %}
+    <div class = "container" style = "border : 1px solid;padding : 10px;margin-top : 30px">
+        <p>Shared File</p>
+        <div class = "col-md-12">
+            <table class="table ">
+                <tr>
+                    <th scope="col">file Name</th>
+                    <th scope="col">owner</th>
+                    <th scope="col"></th>
+                </tr>
+                {% for i,k in sharedFile|zip(fileName) %}
+                <tr>
+                    <form action="{{ url_for('file') }}" method="post">
+                        <td>
+                            <input class="test" type="text" name="fileName" value="{{k}}" id="fileName" readonly>
+                        </td>
+                        <td>
+                            <input class="test" type="text" name="owner" value="{{i['owner']}}" id="owner" readonly>
+                        </td>
+                        <td>
+                            <input type="text" name="file_id" value="{{i['fileID']}}" id="file_id" hidden>
+                            <input type="submit" name="action" value="Download Shared File">
+                            <input type="submit" name="action" value="Shared File Desc">
+                        </td>
+                    </form>
+                </tr>
+                {% endfor %}
+            <table>
+        </div>
+    </div>
+    {% endif%}
+{% endblock %}
