@@ -538,6 +538,8 @@ def homeFunction() :
             try :
                 zippingFile.unZipFile2(file_download,password,path)
             except:
+                #go back to old directory, instead of the new one (because of pyminizip)
+                os.chdir(current)
                 flash("wrong password", "failedCode2")
                 return redirect(url_for('home'))
             
@@ -593,6 +595,8 @@ def homeFunction() :
             try :
                 zippingFile.unZipFile2(file_download,password,path)
             except:
+                #go back to old directory, instead of the new one (because of pyminizip)
+                os.chdir(current)
                 flash("wrong password", "failedCode2")
                 return redirect(url_for('home'))
             
@@ -1121,6 +1125,13 @@ def editFileName() :
         
         fileName = request.form['fileName']
         accountName = session['username']
+        
+        test = fileName.lstrip(" ")
+        test = test.rstrip(" ")
+                
+        if test == "" :
+            flash("File Name can't be empty", "failedCode2")        
+            return redirect(url_for('fileInfo'))
         
         fs.updateFileName(accountName,fileID,fileName)
 

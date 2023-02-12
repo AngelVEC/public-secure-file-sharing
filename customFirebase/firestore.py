@@ -70,6 +70,7 @@ def updateShareCode(accountName,fileID,code) :
 
 def doesEmailExist(email):
     result = db.collection('account').where("email", "==", email).get()
+    queryResult = {}
     for results in result :
         queryResult = results.to_dict()
     return len(queryResult) > 0
